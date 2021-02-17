@@ -6,12 +6,13 @@ from re import match
 from app.actions import Actions
 
 allowed_commands = [
-   'show-task'
-   'show-tasks'
-   'my-task'
-   'my-tasks'
-   'help'
+    'show-task'
+    'show-tasks'
+    'my-task'
+    'my-tasks'
+    'help'
 ]
+
 
 def create_app(config_name):
 
@@ -24,12 +25,15 @@ def create_app(config_name):
         command_text = request.data.get('text')
         command_text = command_text.split(' ')
         slack_uid = request.data.get('user_id')
+
+        # do post request on slack api
         slackhelper = SlackHelper()
         slack_user_info = slackhelper.user_info(slack_uid)
         actions = Actions(slackhelper, slack_user_info)
 
         if command_text[0] not in allowed_commands:
-            response_body = {'text': 'Invalid Command Sent - `/ranti help` for available commands'}
+            response_body = {
+                'text': 'Invalid Command Sent - `/ranti help` for available commands'}
 
         if command_text[0] == 'help':
             response_body = actions.help()
